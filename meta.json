@@ -2,7 +2,7 @@
   "$schema": "https://dl.viam.dev/module.schema.json",
   "module_id": "brad-grigsby:my-sbarro-sensor",
   "visibility": "public",
-  "url": "",
+  "url": "https://github.com/bgrigsby8/my-sbarro-sensor",
   "description": "Modular sensor component: sbarro-data",
   "models": [
     {
