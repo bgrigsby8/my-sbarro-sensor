@@ -51,8 +51,8 @@ class SbarroData(Sensor, EasyResource):
         LOGGER.info("Reconfiguring " + self.name)
         self.DEPS = dependencies
         attrs = struct_to_dict(config.attributes)
-        self.base_camera_name = str(attrs.get("base_camera_name", "camera-1"))
-        self.base_vision_name = str(attrs.get("base_vision_name", "vision-1"))
+        self.base_camera_name = str(attrs.get("base_camera_name"))
+        self.base_vision_name = str(attrs.get("base_vision_name"))
 
         return super().reconfigure(config, dependencies)
 
