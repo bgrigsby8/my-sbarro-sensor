@@ -1,7 +1,5 @@
 import asyncio
 from datetime import datetime
-import os
-from dotenv import load_dotenv
 from typing import Any, ClassVar, Mapping, Optional, Sequence, cast
 
 from typing_extensions import Self
@@ -15,14 +13,9 @@ from viam.resource.base import ResourceBase
 from viam.resource.easy_resource import EasyResource
 from viam.resource.types import Model, ModelFamily
 from viam.services.vision import Vision
-from viam.app.viam_client import ViamClient
 from viam.utils import SensorReading, struct_to_dict
-from viam.rpc.dial import DialOptions, Credentials
-from viam.robot.client import RobotClient
 
 LOGGER = getLogger(__name__)
-
-load_dotenv()
 
 class SbarroData(Sensor, EasyResource):
     MODEL: ClassVar[Model] = Model(
@@ -63,24 +56,6 @@ class SbarroData(Sensor, EasyResource):
 
         return super().reconfigure(config, dependencies)
 
-    async def connect(self):
-        # Connect to Viam Client
-        LOGGER.info("Connecting to Viam Client")
-        dial_options = DialOptions(
-        credentials=Credentials(
-            type="api-key",
-            payload=os.getenv("API_KEY"),
-        ),
-        auth_entity=os.getenv("API_KEY_ID")
-        )
-        LOGGER.info("Connecting to Viam Client")
-        try:
-            self.viam_client = await ViamClient.create_from_dial_options(dial_options)
-        except Exception as e:
-            raise Exception("Failed to connect to Viam Client", e)
-
-        return 
-
     async def get_model_detection(
         self,
     ) -> Detection:
@@ -97,12 +72,7 @@ class SbarroData(Sensor, EasyResource):
         timeout: Optional[float] = None,
         **kwargs
     ) -> Mapping[str, SensorReading]:
-        await self.connect()
-
-        app_client = self.viam_client.app_client
-        location_id = "qegklkdpw0" # Get location id from config?
-        location = await app_client.get_location(location_id=location_id) 
-        
+        # Get detections from the vision service
         detections = await self.get_model_detection()
 
         readings = []
@@ -113,7 +83,6 @@ class SbarroData(Sensor, EasyResource):
             readings.append({
                 "current_timestamp": current_timestamp,
                 "initial_timestamp": initial_timestamp,
-                "location_name": location.name,
                 "total_trays": total_trays,
             })
 
