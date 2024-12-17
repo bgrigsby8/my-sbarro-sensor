@@ -1,0 +1,15 @@
+{
+  "$schema": "https://dl.viam.dev/module.schema.json",
+  "module_id": "brad-grigsby:my-sbarro-sensor",
+  "visibility": "public",
+  "url": "",
+  "description": "Modular sensor component: sbarro-data",
+  "models": [
+    {
+      "api": "rdk:component:sensor",
+      "model": "brad-grigsby:my-sbarro-sensor:sbarro-data"
+    }
+  ],
+  "entrypoint": "./run.sh",
+  "first_run": ""
+}
